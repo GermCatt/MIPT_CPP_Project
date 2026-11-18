@@ -1,2 +1,5 @@
 vscode
 build
+.clang-format
+.vscode
+/CMakeUserPresets.json
