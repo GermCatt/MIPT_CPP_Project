@@ -22,6 +22,10 @@ class NeuralNetwork {
   Matrix ForwardLogits(const Matrix& input) const;
   Matrix Predict(const Matrix& input) const;
 
+  const DenseLayer& GetLayer1() const { return layer1_; }
+  const DenseLayer& GetLayer2() const { return layer2_; }
+  const DenseLayer& GetOutputLayer() const { return output_layer_; }
+
   NetworkGradients Backward(const Matrix& input, const Matrix& targets,
                             const Matrix& mask) const;
   void ApplyGradients(const NetworkGradients& gradients, double learning_rate);

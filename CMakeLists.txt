@@ -18,6 +18,8 @@ add_executable(app
     neural_network/dense_layer.hpp
     neural_network/instruments/activations.hpp
     common/errors.hpp
+    common/weights.hpp
+    common/weights.cpp
     neural_network/neural_network.cpp
     neural_network/neural_network.hpp
     neural_network/instruments/loss.cpp
