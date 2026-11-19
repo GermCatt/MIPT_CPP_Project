@@ -2,11 +2,26 @@ cmake_minimum_required(VERSION 3.21)
 
 project(cpp_project LANGUAGES CXX)
 
+option(TRAIN_NETWORK "Build the neural network training program" OFF)
+if(TRAIN_NETWORK)
+    set(APP_MAIN neural_network/train.cpp)
+else()
+    set(APP_MAIN main.cpp)
+endif()
+
 add_executable(app
-    main.cpp
+    ${APP_MAIN}
     neural_network/instruments/matrix.cpp
+    neural_network/dense_layer.cpp
+    neural_network/instruments/activations.cpp
     neural_network/instruments/matrix.hpp
+    neural_network/dense_layer.hpp
+    neural_network/instruments/activations.hpp
     common/errors.hpp
+    neural_network/neural_network.cpp
+    neural_network/neural_network.hpp
+    neural_network/instruments/loss.cpp
+    neural_network/instruments/loss.hpp
 )
 
 target_include_directories(app PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")

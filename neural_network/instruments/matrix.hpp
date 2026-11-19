@@ -21,8 +21,6 @@ class Matrix {
 
   const std::vector<double>& GetBody() const;
 
-  // Unchecked access: 0 <= row < rows_, 0 <= col < cols_.
-  // Defined here so callers can inline indexing without link-time optimization.
   double& operator()(int row, int col) noexcept {
     return body_[static_cast<std::size_t>(row) *
                      static_cast<std::size_t>(cols_) +
