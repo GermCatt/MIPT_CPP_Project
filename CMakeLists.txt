@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(cpp_project LANGUAGES CXX)
 
-option(TRAIN_NETWORK "Build the neural network training program" OFF)
+option(TRAIN_NETWORK "Build the neural network training program" ON)
 if(TRAIN_NETWORK)
     set(APP_MAIN neural_network/train.cpp)
 else()
