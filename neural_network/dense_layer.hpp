@@ -1,6 +1,11 @@
+/*
+Created by Abelentsev German
+19.11.2026
+*/
+
 #pragma once
 
-#include "neural_network/instruments/matrix.hpp"
+#include "instruments\matrix.hpp"
 
 struct DenseGradients {
   Matrix d_weights;

@@ -2,7 +2,7 @@
 
 #include "neural_network/instruments/activations.hpp"
 #include "neural_network/dense_layer.hpp"
-#include "neural_network/instruments/matrix.hpp"
+#include "neural_network\instruments\matrix.hpp"
 
 int main() {
   Matrix w({{1, 2, 3}, {-4, -5, -6}});

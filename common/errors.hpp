@@ -9,6 +9,13 @@ class CommonError : public std::runtime_error {
       : std::runtime_error(message) {}
 };
 
+class ValidationFailError : public CommonError {
+ public:
+  explicit ValidationFailError(const std::string& message)
+      : CommonError(message) {}
+};
+
+
 class InvalidArgumentError : public CommonError {
  public:
   explicit InvalidArgumentError(const std::string& message)

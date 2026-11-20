@@ -1,3 +1,8 @@
+/*
+Created by Abelentsev German
+19.11.2026
+*/
+
 #include "common/weights.hpp"
 
 #include <cmath>

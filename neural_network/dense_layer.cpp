@@ -1,7 +1,12 @@
+/*
+Created by Abelentsev German
+19.11.2026
+*/
+
 #include "neural_network/dense_layer.hpp"
 
 #include "common/errors.hpp"
-#include "neural_network/instruments/matrix.hpp"
+#include "instruments\matrix.hpp"
 
 DenseLayer::DenseLayer(const Matrix& weights, const Matrix& bias)
     : weights_(weights), bias_(bias) {
