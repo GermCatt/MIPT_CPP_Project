@@ -1,3 +1,8 @@
+/*
+Created by Abelentsev German
+21.11.2026
+*/
+
 #pragma once
 
 #include <filesystem>

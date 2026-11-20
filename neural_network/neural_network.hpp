@@ -1,3 +1,8 @@
+/*
+Created by Abelentsev German
+19.11.2026
+*/
+
 #pragma once
 #include "neural_network/dense_layer.hpp"
 

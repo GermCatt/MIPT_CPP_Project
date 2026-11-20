@@ -1,3 +1,8 @@
+/*
+Created by Abelentsev German
+19.11.2026
+*/
+
 #include "neural_network/neural_network.hpp"
 
 #include <utility>

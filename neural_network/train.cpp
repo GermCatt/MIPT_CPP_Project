@@ -1,3 +1,8 @@
+/*
+Created by Abelentsev German
+19.11.2026
+*/
+
 #include <filesystem>
 #include <iostream>
 
@@ -11,9 +16,10 @@ int main() try {
   const Matrix w2({{0.4, 0.3, -0.1}, {0.2, 0.5, 0.1}});
   const Matrix w3({{0.2, 0.3}, {-0.2, 0.1}, {0.4, 0.2}});
   const bool resume = std::filesystem::exists(path);
-  NeuralNetwork network = resume
-      ? LoadWeights(path)
-      : NeuralNetwork(w1, Matrix(3, 1), w2, Matrix(2, 1), w3, Matrix(3, 1));
+  NeuralNetwork network =
+      resume
+          ? LoadWeights(path)
+          : NeuralNetwork(w1, Matrix(3, 1), w2, Matrix(2, 1), w3, Matrix(3, 1));
   if (resume) std::cout << "Loaded " << path << '\n';
 
   const Matrix input({{1.0}, {0.0}});
@@ -24,7 +30,8 @@ int main() try {
 
   for (int step = 0; step < steps; ++step) {
     if (step % 100 == 0) {
-      const double loss = MaskedBCEWithLogits(network.ForwardLogits(input), targets, mask);
+      const double loss =
+          MaskedBCEWithLogits(network.ForwardLogits(input), targets, mask);
       std::cout << "step " << step << ", loss " << loss << '\n';
     }
     const NetworkGradients gradients = network.Backward(input, targets, mask);
@@ -33,7 +40,8 @@ int main() try {
 
   std::cout << "final loss: "
             << MaskedBCEWithLogits(network.ForwardLogits(input), targets, mask)
-            << "\npredictions:\n" << network.Predict(input) << '\n';
+            << "\npredictions:\n"
+            << network.Predict(input) << '\n';
   SaveWeights(network, path);
   std::cout << "Saved " << path << '\n';
 } catch (const std::exception& error) {

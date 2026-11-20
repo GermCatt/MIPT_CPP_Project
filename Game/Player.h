@@ -1,4 +1,4 @@
-#include "Board.h"
+#include "board.hpp"
 
 struct Point {
     int x_;

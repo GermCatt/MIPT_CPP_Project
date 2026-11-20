@@ -11,6 +11,10 @@ endif()
 
 add_executable(app
     ${APP_MAIN}
+    Game/board.hpp
+    Game/board.cpp
+    neural_network/placement_generator.hpp
+    neural_network/placement_generator.cpp
     neural_network/instruments/matrix.cpp
     neural_network/dense_layer.cpp
     neural_network/instruments/activations.cpp
@@ -18,6 +22,10 @@ add_executable(app
     neural_network/dense_layer.hpp
     neural_network/instruments/activations.hpp
     common/errors.hpp
+    common/CellType.hpp
+    common/Config.hpp
+    common/validate.hpp
+    common/validate.cpp
     common/weights.hpp
     common/weights.cpp
     neural_network/neural_network.cpp
