@@ -1,6 +1,6 @@
 /*
 Created by Abelentsev German
-19.11.2026
+21.11.2026
 */
 
 #include "common/weights.hpp"
@@ -56,7 +56,7 @@ DenseLayer ReadLayer(std::istream& in, std::uintmax_t file_size) {
   }
   return DenseLayer(w, b);
 }
-}  // namespace
+}
 
 void SaveWeights(const NeuralNetwork& network, const fs::path& path) {
   if (path.has_parent_path()) fs::create_directories(path.parent_path());

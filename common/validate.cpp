@@ -75,7 +75,7 @@ FleetCounts CheckShipNeighbors(const Field& field) {
   }
   return found;
 }
-}  // namespace
+}
 
 void Validate::ValidateNeihgbours(const Field& field) {
   CheckFieldSize(field);

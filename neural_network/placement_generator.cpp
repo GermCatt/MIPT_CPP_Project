@@ -1,10 +1,11 @@
 /*
 Created by Abelentsev German
-22.11.2026
+21.11.2026
 */
 
 #include "placement_generator.hpp"
 
+#include <algorithm>
 #include <array>
 #include <vector>
 
@@ -58,15 +59,15 @@ bool DrawFleet(Fleet& fleet, std::mt19937& rng) {
                                             static_cast<int>(list.size()) - 1);
     for (int ship = 0; ship < ship_counts[length]; ++ship) {
       const Placement& candidate = list[pick(rng)];
-      for (int i = 0; i < used; ++i) {
-        if (Touch(candidate, fleet[i])) return false;
-      }
+      const bool touches_ship = std::any_of(fleet.begin(), fleet.begin() + used,
+          [&](const Placement& ship) { return Touch(candidate, ship); });
+      if (touches_ship) return false;
       fleet[used++] = candidate;
     }
   }
   return true;
 }
-}  // namespace
+}
 
 std::unique_ptr<Field> GeneratePlacement(std::mt19937& rng) {
   constexpr int max_attempts = 250'000;
