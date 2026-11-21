@@ -3,7 +3,12 @@ Created by Abelentsev German
 19.11.2026
 */
 
-#include "neural_network/instruments/loss.hpp"
+/*
+Modified by Abelentsev German
+21.11.2026
+*/
+
+#include "neural_network/training/loss.hpp"
 
 #include <algorithm>
 #include <cmath>

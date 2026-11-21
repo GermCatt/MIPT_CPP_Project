@@ -1,12 +1,13 @@
 /*
 Created by Abelentsev German
-19.11.2026
+21.11.2026
 */
 
 #include "placement_generator.hpp"
 
 #include <algorithm>
 #include <array>
+#include <vector>
 
 #include "common/Config.hpp"
 #include "common/errors.hpp"
@@ -16,59 +17,75 @@ namespace {
 constexpr int size = Config::board_size;
 constexpr std::array ship_counts{0, Config::single_deck, Config::double_deck,
                                  Config::three_deck, Config::four_deck};
+constexpr int fleet_size = Config::single_deck + Config::double_deck +
+                           Config::three_deck + Config::four_deck;
 
-bool HasRoom(const Field& field, int x, int y, int width, int height) {
-  const int last_row = std::min(size - 1, y + height);
-  const int last_col = std::min(size - 1, x + width);
-  for (int row = std::max(0, y - 1); row <= last_row; ++row) {
-    for (int col = std::max(0, x - 1); col <= last_col; ++col) {
-      if (field[row][col] != CellType::Empty) return false;
-    }
-  }
-  return true;
-}
+struct Placement {
+  int left, top, right, bottom;
+  CellType type;
+};
 
-bool PlaceShip(Field& field, int length, std::mt19937& rng) {
-  constexpr int max_attempts = 100;
-  std::bernoulli_distribution choose_horizontal;
-  for (int attempt = 0; attempt < max_attempts; ++attempt) {
-    const bool horizontal = choose_horizontal(rng);
-    const int width = horizontal ? length : 1;
-    const int height = horizontal ? 1 : length;
-    const int x = std::uniform_int_distribution<int>(0, size - width)(rng);
-    const int y = std::uniform_int_distribution<int>(0, size - height)(rng);
+using Fleet = std::array<Placement, fleet_size>;
 
-    if (!HasRoom(field, x, y, width, height)) continue;
-
-    for (int row = y; row < y + height; ++row) {
-      for (int col = x; col < x + width; ++col) {
-        field[row][col] = static_cast<CellType>(length);
+auto AllPlacements() {
+  std::array<std::vector<Placement>, 5> choices;
+  for (int length = 1; length <= 4; ++length) {
+    const auto type = static_cast<CellType>(length);
+    for (int y = 0; y < size; ++y) {
+      for (int x = 0; x < size; ++x) {
+        if (x + length <= size) {
+          choices[length].push_back({x, y, x + length - 1, y, type});
+        }
+        if (length > 1 && y + length <= size) {
+          choices[length].push_back({x, y, x, y + length - 1, type});
+        }
       }
     }
-    return true;
   }
-  return false;
+  return choices;
 }
 
-bool PlaceFleet(Field& field, std::mt19937& rng) {
+bool Touch(const Placement& a, const Placement& b) {
+  return a.left <= b.right + 1 && b.left <= a.right + 1 &&
+         a.top <= b.bottom + 1 && b.top <= a.bottom + 1;
+}
+
+bool DrawFleet(Fleet& fleet, std::mt19937& rng) {
+  static const auto choices = AllPlacements();
+  int used = 0;
   for (int length = 4; length >= 1; --length) {
+    const auto& list = choices[length];
+    std::uniform_int_distribution<int> pick(0,
+                                            static_cast<int>(list.size()) - 1);
     for (int ship = 0; ship < ship_counts[length]; ++ship) {
-      if (!PlaceShip(field, length, rng)) return false;
+      const Placement& candidate = list[pick(rng)];
+      const bool touches_ship = std::any_of(fleet.begin(), fleet.begin() + used,
+          [&](const Placement& ship) { return Touch(candidate, ship); });
+      if (touches_ship) return false;
+      fleet[used++] = candidate;
     }
   }
   return true;
 }
-}  // namespace
+}
 
 std::unique_ptr<Field> GeneratePlacement(std::mt19937& rng) {
-  constexpr int max_layouts = 100;
-  for (int attempt = 0; attempt < max_layouts; ++attempt) {
+  constexpr int max_attempts = 250'000;
+  Fleet fleet;
+  for (int attempt = 0; attempt < max_attempts; ++attempt) {
+    if (!DrawFleet(fleet, rng)) continue;
+
     auto field = std::make_unique<Field>(
         size, std::vector<CellType>(size, CellType::Empty));
-    if (PlaceFleet(*field, rng)) {
-      Validate::ValidatePlacement(*field);
-      return field;
+    for (const Placement& ship : fleet) {
+      for (int y = ship.top; y <= ship.bottom; ++y) {
+        for (int x = ship.left; x <= ship.right; ++x) {
+          (*field)[y][x] = ship.type;
+        }
+      }
     }
+    Validate::ValidatePlacement(*field);
+    return field;
   }
   throw ValidationFailError(
       "Не удалось сгенерировать расстановку за отведённое число попыток");

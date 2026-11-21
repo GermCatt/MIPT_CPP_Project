@@ -12,7 +12,7 @@ struct NetworkGradients {
   DenseGradients output;
 };
 
-class NeuralNetwork {
+class NeuralNetwork final {
  private:
   DenseLayer layer1_;
   DenseLayer layer2_;

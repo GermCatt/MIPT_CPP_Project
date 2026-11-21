@@ -3,11 +3,6 @@ Created by Abelentsev German
 19.11.2026
 */
 
-/*
-Класс матриц НЕБЕЗОПАСНЫЙ. В нём намеренно вырезаны все проверки для ускорения
-вычислений в процессе обучения Использовать его не для самой нейросети, а для
-чего угодно ещё НЕ РЕКОМЕНДУЕТСЯ
-*/
 
 #pragma once
 
@@ -17,7 +12,7 @@ Created by Abelentsev German
 
 #include "common/errors.hpp"
 
-class Matrix {
+class Matrix final {
  private:
   int rows_;
   int cols_;

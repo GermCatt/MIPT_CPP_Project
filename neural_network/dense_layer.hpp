@@ -13,7 +13,7 @@ struct DenseGradients {
   Matrix d_input;
 };
 
-class DenseLayer {
+class DenseLayer final {
  private:
   Matrix weights_;
   Matrix bias_;

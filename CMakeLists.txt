@@ -3,14 +3,28 @@ cmake_minimum_required(VERSION 3.21)
 project(cpp_project LANGUAGES CXX)
 
 option(TRAIN_NETWORK "Build the neural network training program" OFF)
+set(TRAINING_SOURCES
+    neural_network/training/training_example.hpp
+    neural_network/training/training_example.cpp
+    neural_network/training/shot_policy.hpp
+    neural_network/training/shot_policy.cpp
+)
+
 if(TRAIN_NETWORK)
-    set(APP_MAIN neural_network/train.cpp)
+    set(APP_MAIN
+        neural_network/training/train.cpp
+        neural_network/training/network_gradients.cpp
+        neural_network/training/loss.hpp
+        neural_network/training/loss.cpp
+        ${TRAINING_SOURCES}
+    )
 else()
     set(APP_MAIN main.cpp)
 endif()
 
-add_executable(app
-    ${APP_MAIN}
+set(COMMON_SOURCES
+    neural_network/board_input.hpp
+    neural_network/board_input.cpp
     Game/board.hpp
     Game/board.cpp
     neural_network/placement_generator.hpp
@@ -30,20 +44,29 @@ add_executable(app
     common/weights.cpp
     neural_network/neural_network.cpp
     neural_network/neural_network.hpp
-    neural_network/instruments/loss.cpp
-    neural_network/instruments/loss.hpp
 )
 
-target_include_directories(app PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-
-set_target_properties(app PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED YES
-    CXX_EXTENSIONS NO
+set(HARD_NETWORK neural_network/hard_network.cpp neural_network/hard_network.hpp neural_network/local_wound.hpp)
+add_executable(app ${APP_MAIN} Game/computer_opponent.hpp Game/computer_opponent.cpp ${HARD_NETWORK} ${COMMON_SOURCES})
+add_executable(local_train EXCLUDE_FROM_ALL
+    neural_network/training/local_train.cpp
+    neural_network/training/layout_io.hpp
+    ${TRAINING_SOURCES}
+    neural_network/training/hard_network_trainer.hpp
+    neural_network/training/hard_network_trainer.cpp
+    ${HARD_NETWORK} ${COMMON_SOURCES}
 )
 
-if(MSVC)
-    target_compile_options(app PRIVATE /W4 /utf-8)
-else()
-    target_compile_options(app PRIVATE -Wall -Wextra -Wpedantic)
-endif()
+foreach(target IN ITEMS app local_train)
+    target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+    set_target_properties(${target} PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
+    )
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /W4 /utf-8)
+    else()
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+endforeach()
