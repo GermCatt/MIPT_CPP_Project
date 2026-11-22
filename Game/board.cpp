@@ -3,6 +3,11 @@ Created by Abelentsev German
 21.11.2026
 */
 
+/*
+Modified by Abelentsev German
+22.11.2026
+*/
+
 #include "board.hpp"
 
 #include <utility>
@@ -77,6 +82,8 @@ CellType Board::GetCell(int x, int y) const {
   CheckCoordinates(x, y);
   return (*body_)[y][x];
 }
+
+BoardInput Board::GetVisibleBoard() const { return BoardInput(*this); }
 
 std::weak_ptr<const Field> Board::ObserveField() const noexcept {
   return body_;

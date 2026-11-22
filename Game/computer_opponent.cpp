@@ -3,6 +3,11 @@ Created by Abelentsev German
 21.11.2026
 */
 
+/*
+Modified by Abelentsev German
+22.11.2026
+*/
+
 #include "Game/computer_opponent.hpp"
 
 #include <algorithm>
@@ -29,7 +34,7 @@ ComputerOpponent::ComputerOpponent(Difficulty difficulty, unsigned seed,
   if (difficulty == Difficulty::Easy) {
     auto network = LoadWeights(models / "easy.txt");
     if (network.GetLayer1().GetWeights().GetCols() !=
-            BoardInput::features_per_cell * BoardInput::cells ||
+            NetworkInput::features_per_cell * BoardInput::cells ||
         network.GetOutputLayer().GetWeights().GetRows() != BoardInput::cells)
       throw std::runtime_error("Easy weights do not match the board");
     choose_ = [network = std::move(network)](const Matrix& input,
@@ -37,7 +42,7 @@ ComputerOpponent::ComputerOpponent(Difficulty difficulty, unsigned seed,
       const auto scores = network.ForwardLogits(input);
       int best = -1;
       for (int cell : order) {
-        if (input(BoardInput::features_per_cell * cell, 0) == 0) continue;
+        if (input(NetworkInput::features_per_cell * cell, 0) == 0) continue;
         if (!std::isfinite(scores(cell, 0)))
           throw std::runtime_error("Non-finite easy network score");
         if (best < 0 || scores(cell, 0) > scores(best, 0)) best = cell;
@@ -53,7 +58,8 @@ ComputerOpponent::ComputerOpponent(Difficulty difficulty, unsigned seed,
   };
 }
 
-std::pair<int, int> ComputerOpponent::ChooseShot(const Board& board) const {
-  const int cell = choose_(MakeVisibleInput(board), order_);
+std::pair<int, int> ComputerOpponent::ChooseShot(
+    const BoardInput& board) const {
+  const int cell = choose_(NetworkInput::Encode(board), order_);
   return {cell % Config::board_size, cell / Config::board_size};
 }

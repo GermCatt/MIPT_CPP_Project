@@ -3,6 +3,11 @@ Created by Abelentsev German
 21.11.2026
 */
 
+/*
+Modified by Abelentsev German
+22.11.2026
+*/
+
 #include "neural_network/hard_network.hpp"
 
 #include <algorithm>
@@ -89,7 +94,8 @@ class SummedAreaTable final {
 template <typename Value, std::size_t N>
 Value DotPrefix(const std::array<Value, N>& left,
                 const std::array<Value, N>& right, std::size_t count) {
-  return std::inner_product(left.begin(), left.begin() + count, right.begin(), Value{});
+  return std::inner_product(left.begin(), left.begin() + count, right.begin(),
+                            Value{});
 }
 
 struct Segment {
@@ -330,10 +336,13 @@ HardNetwork::FeatureMap HardNetwork::Encode(const Matrix& input) const {
   std::array<int, 4> totals{};
   for (int i = 0; i < cells; ++i) {
     int state = -1;
-    for (int channel = 0; channel < BoardInput::features_per_cell; ++channel) {
-      const double value = input(i * BoardInput::features_per_cell + channel, 0);
+    for (int channel = 0; channel < NetworkInput::features_per_cell;
+         ++channel) {
+      const double value =
+          input(i * NetworkInput::features_per_cell + channel, 0);
       if (value == 0) continue;
-      if (value != 1 || state >= 0) throw std::invalid_argument("Invalid visible state");
+      if (value != 1 || state >= 0)
+        throw std::invalid_argument("Invalid visible state");
       state = channel;
     }
     if (state < 0) throw std::invalid_argument("Invalid visible state");
@@ -513,17 +522,20 @@ float HardNetwork::Score(const Features& features) const {
 }
 int HardNetwork::ChooseEncoded(const Matrix& input, const FeatureMap& features,
                                const ShotOrder& order) const {
-  if (input.GetRows() != cells * BoardInput::features_per_cell || input.GetCols() != 1)
+  if (input.GetRows() != cells * NetworkInput::features_per_cell ||
+      input.GetCols() != 1)
     throw std::invalid_argument("Invalid visible board dimensions");
   std::array<bool, cells> seen{};
   float best = -std::numeric_limits<float>::infinity();
   int chosen = -1;
   for (int i : order) {
-    if (i < 0 || i >= cells || seen[i]) throw std::invalid_argument("Invalid shot order");
+    if (i < 0 || i >= cells || seen[i])
+      throw std::invalid_argument("Invalid shot order");
     seen[i] = true;
     if (input(i * 4, 0) == 0) continue;
     const float score = Score(features[i]);
-    if (!std::isfinite(score)) throw std::runtime_error("Non-finite Hard score");
+    if (!std::isfinite(score))
+      throw std::runtime_error("Non-finite Hard score");
     if (score > best) {
       best = score;
       chosen = i;
@@ -535,7 +547,8 @@ int HardNetwork::ChooseEncoded(const Matrix& input, const FeatureMap& features,
 }
 HardNetwork HardNetwork::Load(const std::filesystem::path& path) {
   std::ifstream in(path);
-  if (!in) throw std::runtime_error("Cannot open Hard weights: " + path.string());
+  if (!in)
+    throw std::runtime_error("Cannot open Hard weights: " + path.string());
   HardNetwork network = Load(in);
   std::string extra;
   if (in >> extra || !in.eof() || in.bad())

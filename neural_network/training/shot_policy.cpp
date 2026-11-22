@@ -3,6 +3,11 @@ Created by Abelentsev German
 21.11.2026
 */
 
+/*
+Modified by Abelentsev German
+22.11.2026
+*/
+
 #include "shot_policy.hpp"
 
 #include <cmath>
@@ -15,7 +20,7 @@ constexpr int size = Config::board_size;
 
 void MaskKnownWater(TrainingExample& example) {
   for (int cell = 0; cell < BoardInput::cells; ++cell) {
-    const int offset = BoardInput::features_per_cell * cell;
+    const int offset = NetworkInput::features_per_cell * cell;
     const bool hit = example.input(offset + 2, 0) == 1;
     const bool sunk = example.input(offset + 3, 0) == 1;
     if (!hit && !sunk) continue;
@@ -33,7 +38,7 @@ void MaskKnownWater(TrainingExample& example) {
 int HuntScore(const Matrix& input, int cell) {
   auto hit = [&](int x, int y) {
     return x >= 0 && x < size && y >= 0 && y < size &&
-           input(BoardInput::features_per_cell * (y * size + x) + 2, 0) == 1;
+           input(NetworkInput::features_per_cell * (y * size + x) + 2, 0) == 1;
   };
   const int x = cell % size, y = cell / size;
   int score = 0;

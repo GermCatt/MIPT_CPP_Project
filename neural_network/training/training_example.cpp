@@ -3,14 +3,19 @@ Created by Abelentsev German
 21.11.2026
 */
 
+/*
+Modified by Abelentsev German
+22.11.2026
+*/
+
 #include "training_example.hpp"
 
 TrainingExample MakeTrainingExample(const Board& board) {
   constexpr int size = Config::board_size;
   constexpr int cells = BoardInput::cells;
-  constexpr int features = BoardInput::features_per_cell;
+  const auto visible = board.GetVisibleBoard();
   TrainingExample example{
-      .input = Matrix(features * cells, 1),
+      .input = NetworkInput::Encode(visible),
       .targets = Matrix(cells, 1),
       .mask = Matrix(cells, 1),
   };
@@ -19,10 +24,8 @@ TrainingExample MakeTrainingExample(const Board& board) {
     for (int x = 0; x < size; ++x) {
       const int i = y * size + x;
       const CellType cell = board.GetCell(x, y);
-      const int channel = BoardInput::VisibleChannel(cell);
-      example.input(features * i + channel, 0) = 1;
       example.targets(i, 0) = cell != CellType::Empty && cell != CellType::Miss;
-      example.mask(i, 0) = channel == 0;
+      example.mask(i, 0) = visible.GetCell(x, y) == BoardInput::Cell::Unknown;
     }
   }
   return example;

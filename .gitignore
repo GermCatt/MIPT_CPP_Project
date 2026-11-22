@@ -3,3 +3,4 @@ build
 .clang-format
 .vscode
 /CMakeUserPresets.json
+/local_game/

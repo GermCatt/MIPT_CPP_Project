@@ -3,14 +3,19 @@ Created by Abelentsev German
 21.11.2026
 */
 
+/*
+Modified by Abelentsev German
+22.11.2026
+*/
+
 #pragma once
 
 #include <memory>
 #include <vector>
-#include "common/Field.hpp"
+
+#include "Game/board_input.hpp"
 #include "common/CellType.hpp"
-
-
+#include "common/Field.hpp"
 
 class Board {
  public:
@@ -23,6 +28,7 @@ class Board {
 
   void Shoot(int x, int y);
   CellType GetCell(int x, int y) const;
+  BoardInput GetVisibleBoard() const;
   std::weak_ptr<const Field> ObserveField() const noexcept;
 
  private:

@@ -33,8 +33,10 @@ else()
 endif()
 
 set(COMMON_SOURCES
-    neural_network/board_input.hpp
-    neural_network/board_input.cpp
+    Game/board_input.hpp
+    Game/board_input.cpp
+    neural_network/network_input.hpp
+    neural_network/network_input.cpp
     Game/board.hpp
     Game/board.cpp
     neural_network/placement_generator.hpp
