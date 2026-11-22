@@ -19,7 +19,17 @@ if(TRAIN_NETWORK)
         ${TRAINING_SOURCES}
     )
 else()
-    set(APP_MAIN main.cpp)
+    set(APP_MAIN main.cpp
+            common/game_types.hpp
+            common/board_snapshot.hpp
+            common/player_view.hpp
+            common/Field.hpp
+            Interfaces/IGameField.hpp
+            Interfaces/IShotInput.hpp
+            Interfaces/IGameOutput.hpp
+            Game/Game.cpp
+            Game/Game.hpp
+    )
 endif()
 
 set(COMMON_SOURCES

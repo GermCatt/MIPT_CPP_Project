@@ -7,10 +7,10 @@ Created by Abelentsev German
 
 #include <memory>
 #include <vector>
-
+#include "common/Field.hpp"
 #include "common/CellType.hpp"
 
-using Field = std::vector<std::vector<CellType>>;
+
 
 class Board {
  public:
