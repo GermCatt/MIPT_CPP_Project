@@ -9,7 +9,7 @@
 class IGameOutput {
 public:
     virtual ~IGameOutput() = default;
-    virtual void SetPlayerVIew(PlayerId player_id, const PlayerView& result) = 0;
+    virtual void SetPlayerView(PlayerId player_id, const PlayerView& result) = 0;
 };
 
 #endif //CPP_PROJECT_IGAMEOUTPUT_HPP

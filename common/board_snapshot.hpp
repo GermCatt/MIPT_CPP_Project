@@ -12,7 +12,7 @@ class BoardSnapshot {
 private:
     Field cells_;
 public:
-    explicit BoardSnapshot ();
+    explicit BoardSnapshot (const Field& field);
 
     CellType GetCell(Position Position) const;
 

@@ -6,14 +6,14 @@
 #define CPP_PROJECT_IGAMEFIELD_HPP
 
 #include "common/game_types.hpp"
-#include "common/board_snapshot.hpp"
+#include "common/player_view.hpp"
 
 class IGameField {
 public:
     virtual ~IGameField() = default;
 
-    virtual ShotResult ShotResult(PlayerId player_id, Position position) = 0;
-    virtual BoardSnapshot GetSnapshot(PlayerId player_id) = 0;
+    virtual ShotResult GetShotResult(PlayerId player_id, Position position) = 0;
+    virtual PlayerView GetPlayerView(PlayerId player_id) = 0;
     virtual bool IsGameOver(PlayerId player_id) = 0;
 };
 

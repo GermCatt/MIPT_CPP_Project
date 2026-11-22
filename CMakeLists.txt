@@ -29,6 +29,21 @@ else()
             Interfaces/IGameOutput.hpp
             Game/Game.cpp
             Game/Game.hpp
+            common/board_snapshot.cpp
+            Game/BoardStage.cpp
+            Game/BoardStage.hpp
+            common/player_view.cpp
+            Interfaces/IPlacementProvider.hpp
+            Placement/RandomPlacementProvider.cpp
+            Placement/RandomPlacementProvider.hpp
+            Profiles/PlayerProfile.hpp
+            common/PlayerKind.hpp
+            Profiles/PlayerProfile.cpp
+            Profiles/ProfileManager.cpp
+            Profiles/ProfileManager.hpp
+            Interfaces/IProfileInput.hpp
+            Profiles/ProfileRepository.hpp
+            Profiles/ProfileRepository.cpp
     )
 endif()
 
