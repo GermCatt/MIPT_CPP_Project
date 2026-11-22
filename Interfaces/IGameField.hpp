@@ -10,7 +10,7 @@
 
 class IGameField {
 public:
-    virtual ~IGameFIeld() = default;
+    virtual ~IGameField() = default;
 
     virtual ShotResult ShotResult(PlayerId player_id, Position position) = 0;
     virtual BoardSnapshot GetSnapshot(PlayerId player_id) = 0;

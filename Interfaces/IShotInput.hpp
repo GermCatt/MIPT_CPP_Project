@@ -10,6 +10,6 @@
 class IShotInput {
 public:
     virtual ~IShotInput() = default;
-    virtual position GetShot(PlayerId player_id) = 0;
+    virtual Position GetShot(PlayerId player_id) = 0;
 };
 #endif //CPP_PROJECT_ISHOTINPUT_HPP

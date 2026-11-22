@@ -7,6 +7,6 @@
 #include "board_snapshot.hpp"
 class PlayerView {
     BoardSnapshot own_board_;
-    BoardShapshot radar_board_;
+    BoardSnapshot radar_board_;
 };
 #endif //CPP_PROJECT_PLAYER_VIEW_HPP
